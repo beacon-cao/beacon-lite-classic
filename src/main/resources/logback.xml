@@ -1,50 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
+    <!-- ============================================================ -->
+    <!-- 日志格式                                                     -->
+    <!-- ============================================================ -->
+    <!-- 开发环境（带颜色高亮） -->
+    <property name="PATTERN_CONSOLE" value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} | %highlight(%-5level) | %boldYellow(%thread) %boldGreen(%-40.40logger{39}) | %m%n"/>
 
-    <property name="PATTERN_DEFAULT" value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} | %highlight(${LOG_LEVEL_PATTERN:-%5p} ${PID:- }) | %boldYellow(%thread) %boldGreen(%-40.40logger{39}) | %m%n"/>
-    <!--生产环境ASIN去掉颜色-->
-    <property name="PATTERN_PRODUCT" value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} | %-5level | %thread | %-40.40logger{39} | %m%n"/>
-    <!--日志文件保存的文件夹-->
-    <property name="LOG_FILE_PATH" value="/data/123"/>
-    <!-- 控制台输出日志 -->
+    <!-- 生产环境（纯文本，便于日志采集） -->
+    <property name="PATTERN_PRODUCTION" value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} | %-5level | %thread | %-40.40logger{39} | %m%n"/>
+
+    <!-- 日志文件路径（相对路径，位于项目运行目录的 logs/ 下） -->
+    <property name="LOG_FILE_PATH" value="logs"/>
+
+    <!-- ============================================================ -->
+    <!-- Appender: 控制台                                             -->
+    <!-- ============================================================ -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${PATTERN_DEFAULT}</pattern>
-            <!--⚠️logback日志的编码格式，在启动时取系统的编码格式，是一个自动切换的过程，如果需要手动指定，可以在encoder标签中通过charset标签指定，如下所示-->
+            <pattern>${PATTERN_CONSOLE}</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
 
-    <!-- 文件输出日志，指定输出路径 -->
+    <!-- ============================================================ -->
+    <!-- Appender: 滚动文件                                           -->
+    <!-- ============================================================ -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 设置相对路径，此处使用maven占位符，需要搭配resource标签开启对当配置文件所在目录的过滤  -->
+        <!--
+            文件名使用 Maven resource filtering 注入 finalName。
+            pom.xml 中需配置 <resources><resource><filtering>true</filtering>...
+            若未开启 filtering，可替换为固定名称，如：beacon-lite-jdk8.log
+        -->
         <file>${LOG_FILE_PATH}/${project.build.finalName}.log</file>
 
-        <!-- 滚动策略：基于时间 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 日志归档命名格式：%d=日期, %i=索引（仅用于大小+时间混合模式） -->
             <fileNamePattern>${LOG_FILE_PATH}/${project.build.finalName}.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- 保留最近 30 天的日志 -->
+            <!-- 保留 30 天 -->
             <maxHistory>30</maxHistory>
-            <!-- 可选：启动时立即清理过期日志（默认只在滚动时清理） -->
-            <cleanHistoryOnStart>true</cleanHistoryOnStart>
-            <!-- 可选：限制所有归档日志总大小（如 10GB），超限也会触发删除 -->
-            <!-- <totalSizeCap>10GB</totalSizeCap> -->
+            <!-- 归档日志总大小上限，超限触发删除 -->
+            <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>
 
-
         <encoder>
-            <pattern>${PATTERN_PRODUCT}</pattern>
+            <pattern>${PATTERN_PRODUCTION}</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
 
-    <!-- 设置日志级别和使用的 appender -->
-    <root level="INFO">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
-    </root>
+    <!-- ============================================================ -->
+    <!-- 日志级别                                                     -->
+    <!-- ============================================================ -->
+    <!-- 项目包：开发期 DEBUG，部署后可调整为 INFO 或通过配置覆盖 -->
+    <logger name="com.beacon" level="DEBUG"/>
 
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
 
 </configuration>

@@ -48,6 +48,14 @@
         <!-- 输出文件名格式 -->
         <finalName>${project.artifactId}</finalName>
 
+        <!-- 开启 resource filtering，允许 logback.xml 中使用 Maven 属性 -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- maven-assembly-plugin 配置 -->
             <plugin>
