@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <slf4j.version>2.0.9</slf4j.version>
-        <logback.version>1.3.14</logback.version>
+        <logback.version>1.3.16</logback.version>
         <lombok.version>1.18.34</lombok.version>
     </properties>
 
@@ -26,7 +26,7 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <!-- Logback 日志实现 -->
+        <!-- Logback 日志实现 支持JDK8未找到没有漏洞的版本-->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
