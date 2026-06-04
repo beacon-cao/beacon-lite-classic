@@ -1,4 +1,4 @@
-# beacon-lite-jdk8
+# beacon-lite-classic
 
 > Java Maven 基础脚手架 — 拿来即用，开箱即用。
 
@@ -11,13 +11,13 @@
 ```bash
 # 克隆项目
 git clone <your-repo-url>
-cd beacon-lite-jdk8
+cd beacon-lite-classic
 
 # 编译并打包（生成 fat JAR）
 mvn clean package
 
 # 直接运行
-java -jar target/beacon-lite-jdk8.jar
+java -jar target/beacon-lite-classic.jar
 ```
 
 ---
@@ -44,11 +44,11 @@ java -jar target/beacon-lite-jdk8.jar
 | 模式 | 输出目标 | 格式 |
 |---|---|---|
 | **控制台** | `System.out` | 带 ANSI 颜色高亮，适合开发调试 |
-| **滚动文件** | `logs/beacon-lite-jdk8.log` | 纯文本，适合生产环境日志采集 |
+| **滚动文件** | `logs/beacon-lite-classic.log` | 纯文本，适合生产环境日志采集 |
 
 ### 日志滚动策略
 
-- 按天滚动归档（`beacon-lite-jdk8.yyyy-MM-dd.log`）
+- 按天滚动归档（`beacon-lite-classic.yyyy-MM-dd.log`）
 - 保留 **30 天**
 - 归档总大小上限 **3GB**，超限自动清理
 
@@ -107,7 +107,7 @@ mvn exec:java -Dexec.mainClass="com.beacon.BeaconMain"
 项目使用 `maven-assembly-plugin`，打包后直接生成包含所有依赖的可执行 JAR：
 
 ```
-target/beacon-lite-jdk8.jar   ← 可直接 java -jar 运行
+target/beacon-lite-classic.jar   ← 可直接 java -jar 运行
 ```
 
 JAR 已配置 `Main-Class` 清单，无需指定主类。
@@ -117,7 +117,7 @@ JAR 已配置 `Main-Class` 清单，无需指定主类。
 ## 🗂 项目结构
 
 ```
-beacon-lite-jdk8/
+beacon-lite-classic/
 ├── pom.xml                                # Maven 配置
 ├── README.md
 ├── .gitignore
